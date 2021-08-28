@@ -83,4 +83,4 @@ To ease debug/investigations, the script can be launched with some arguments:
 
 * Argument `-t`:
 
-  `-t nn`: where nn is a number defining the delay (in seconds) betwwen the publishing of messages with system information (only applicable with argument `-r loop`)
+  `-t nn`: where nn is a number defining the delay (in seconds) between the publishing of messages with system information (only applicable with argument `-r loop`)
