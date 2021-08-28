@@ -41,6 +41,7 @@ The message can be used to display wihtin [Home Assistant](https://www.home-assi
 * An Odroid-XU4 with [dietPi (Buster)](https://dietpi.com/)
 ![scrrenshot of Home Assistant with entities from script sysinfo_MQTTtoHA](/images/screenshotsysinfo_MQTTtoHA.png)
 To ease the integration with Home Assistant, MQTT discovery messages can be sent by the script `sysinfo_MQTTtoHA.sh`. All sensors for a machine can be attached to a device whose name is the hostname of the machine. It further eases the integration in Home Assistant: by selecting the device in Home Assistant configuration menu, a Lovelace card with all entities is ready to be inserted in one of the tabs.
+![Screenshot to add all entities from sysinfo_MQTTtoHA for a computer](/images/screenshot_device_sysinfo_MQTTtoHA.png)
 
 ## Installation
 It is assumed that an MQTT broker (e.g. [mosquitto](https://mosquitto.org/)) is already installed on one of your computers ans is accessible through the local network.
