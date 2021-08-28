@@ -52,7 +52,7 @@ It is assumed that an MQTT broker (e.g. [mosquitto](https://mosquitto.org/)) is 
 1. Clone the repository or download the script on the machine.
 2. Edit the script with a text editor and adjust the parameters to your configuration
   * MQTT: the IP address of the broker, port, user and password (if needed)
-  * The topic prefix: the MQTT messages with system information are published in topic: mqtt_topicprefix/hostname
+  * The topic prefix: the MQTT messages with system information are published in topic: mqtt_topic_prefix/hostname
   * The Home Assistant discovery prefix (homeassistant by default as mentionned [here](https://www.home-assistant.io/docs/mqtt/discovery/))
   * The default parameters of the scripts: whether discovery messages shall be published or not, whether the MQTT messages with system information shall be sent once or repeatidly, the delay between each publishing. These three parameters can be overridden by arguments on the command line
 3. Run the script (it is recommended to set the update rate to a low value e.g. 5s for intial test) and check if it is working properly:
