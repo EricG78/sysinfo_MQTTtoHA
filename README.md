@@ -65,12 +65,21 @@ The status of the service (active/stopped) is reflected in Home Assistant: the e
 
 ### Command line
 To ease debug/investigations, the script can be launched with some arguments:
-* Argument -d:
-  -d yes: MQTT discovery messages are published at the begining of the execution of the script
-  -d no: MQTT discovery messages are not published
+
+* Argument `-d`:
+
+  `-d yes`: MQTT discovery messages are published at the begining of the execution of the script
+  
+  `-d no`: MQTT discovery messages are not published
+  
 * Argument -r:
-  -r no: the MQTT messages with the system information are not published
-  -r once: the MQTT message with the system information is published once
-  -r loop: the MQTT messages with the system information are published periodically 
-* Argument -t:
-  -t nn: where nn is a number defining the delay (in seconds) betwwen the publishing of messages with system information (only applicable with argument `-r loop`)
+ 
+  `-r no`: the MQTT messages with the system information are not published
+  
+  `-r once`: the MQTT message with the system information is published once
+  
+  `-r loop`: the MQTT messages with the system information are published periodically 
+
+* Argument `-t`:
+
+  `-t nn`: where nn is a number defining the delay (in seconds) betwwen the publishing of messages with system information (only applicable with argument `-r loop`)
