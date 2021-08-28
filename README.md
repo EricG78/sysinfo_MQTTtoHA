@@ -46,7 +46,7 @@ To ease the integration with Home Assistant, MQTT discovery messages can be sent
 ## Installation
 It is assumed that an MQTT broker (e.g. [mosquitto](https://mosquitto.org/)) is already installed on one of your computers ans is accessible through the local network.
 
-`mosquitto_pub` and `bc` shall be available. For Debian based machine, they can be installed by the command `sudo apt-get instzll bc mosquitto-clients`.
+`mosquitto_pub` and `bc` shall be available. For Debian based machine, they can be installed by the command `sudo apt-get install bc mosquitto-clients`.
 
 ### Installation steps
 1. Clone the repository or download the script on the machine.
