@@ -1,6 +1,6 @@
 # sysinfo_MQTTtoHA
 ## Introduction
-The shell script `sysmonitor_MQTTtoHA.sh` collects some system information on the Linux machine it is executed on and publishes MQTT message using JSON format with the information such as:
+The shell script `sysmonitor_MQTTtoHA.sh` collects some system information on the Linux machine it is executed on and publishes MQTT messages using JSON format with some system information:
 * Hostname
 * IP address (with connection type Ethernet or Wireless and SSID)
 * Uptime
@@ -40,10 +40,14 @@ The message can be used to display wihtin [Home Assistant](https://www.home-assi
 * A Raspberry Pi with [piCorePlayer](https://docs.picoreplayer.org/downloads/)
 * An Odroid-XU4 with [dietPi (Buster)](https://dietpi.com/)
 
-To ease the integration with Home Assistant, MQTT discovery messages can be sent by the script `sysinfo_MQTTtoHA.sh`. All sensors for a machine can be attached to a device whose name is the hostname of the machine. It further ease the integration in Home Assistant: by selecting the device in Home Assistant configuration menu, a Lovelace card with all entities is ready to be inserted in one of the tabs.
+To ease the integration with Home Assistant, MQTT discovery messages can be sent by the script `sysinfo_MQTTtoHA.sh`. All sensors for a machine can be attached to a device whose name is the hostname of the machine. It further eases the integration in Home Assistant: by selecting the device in Home Assistant configuration menu, a Lovelace card with all entities is ready to be inserted in one of the tabs.
 
 ## Installation
 It is assumed that an MQTT broker (e.g. [mosquitto](https://mosquitto.org/)) is already installed on one of your computers ans is accessible through the local network.
+
+`mosquitto_pub` and `bc` shall be available. For Debian based machine, they can be installed by the command `sudo apt-get instzll bc mosquitto-clients`.
+
+### Installation steps
 1. Clone the repository or download the script on the machine.
 2. Edit the script with a text editor and adjust the parameters to your configuration
   * MQTT: the IP address of the broker, port, user and password (if needed)
@@ -58,3 +62,15 @@ It is assumed that an MQTT broker (e.g. [mosquitto](https://mosquitto.org/)) is 
 4. If it works as expected, the script can be automatically launched as a service for machines supporting systemd. Run the script `install_service.sh` with the root priviledges: `sudo sh install_service.sh`. By default, a message is sent every minutes. To change the value, edit the script `install_service.sh` with a text editor and replace the value 60 on line 53: `execCmdLine="$shPath $scriptPath -d yes -r loop -t 60"`.
 
 The status of the service (active/stopped) is reflected in Home Assistant: the entities are declared "unavailable" when the service is stopped (or the script no longer executed in loop mode)
+
+### Command line
+To ease debug/investigations, the script can be launched with some arguments:
+* Argument -d:
+  -d yes: MQTT discovery messages are published at the begining of the execution of the script
+  -d no: MQTT discovery messages are not published
+* Argument -r:
+  -r no: the MQTT messages with the system information are not published
+  -r once: the MQTT message with the system information is published once
+  -r loop: the MQTT messages with the system information are published periodically 
+* Argument -t:
+  -t nn: where nn is a number defining the delay (in seconds) betwwen the publishing of messages with system information (only applicable with argument `-r loop`)
