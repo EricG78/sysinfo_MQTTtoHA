@@ -14,12 +14,20 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
+# Echo usage if something isn't right.
+usage() {
+    echo "Usage: $0  [-t rate_s] [-h]\n\n\
+-t rate_s: rate_s shall be a numeric value. It defines the periodicity of the publishing of MQTT messages with system infomation (default value is 60s)
+-h display this help"  1>&2; exit 1;
+}
+
 # Check the script is ran with root priviledge
 if [ "${EUID:- `id -u`}" -ne 0 ]
   then echo "Please run as root:\nsudo sh install_service.sh"
   exit
 fi
 
+# Check if the default value is overriden by argument -t
 update_rate=60
 while getopts ":t:h" o; do
 	case "${o}" in
@@ -78,7 +86,7 @@ if [ ! -f $scriptPath ]; then
 fi
 
 # Full command line
-execCmdLine="$shPath $scriptPath -d yes -r loop -t 60"
+execCmdLine="$shPath $scriptPath -d yes -r loop -t $update_rate"
 
 # Find user behind sudo
 user=$(who am i | awk '{print $1}')
