@@ -16,7 +16,7 @@
 
 # Echo usage if something isn't right.
 usage() {
-    echo "Usage: $0  [-t rate_s] [-h]\n\n\
+    echo "Usage: sudo sh $0  [-t rate_s] [-h]\n\n\
 -t rate_s: rate_s shall be a numeric value. It defines the periodicity of the publishing of MQTT messages with system infomation (default value is 60s)
 -h display this help"  1>&2; exit 1;
 }
