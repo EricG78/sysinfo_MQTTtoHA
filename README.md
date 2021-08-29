@@ -54,8 +54,8 @@ It is assumed that an MQTT broker (e.g. [mosquitto](https://mosquitto.org/)) is 
   * MQTT: the IP address of the broker, port, user and password (if needed)
   * The topic prefix: the MQTT messages with system information are published in topic: mqtt_topic_prefix/hostname
   * The Home Assistant discovery prefix (homeassistant by default as mentionned [here](https://www.home-assistant.io/docs/mqtt/discovery/))
-  * The default parameters of the scripts: whether discovery messages shall be published or not, whether the MQTT messages with system information shall be sent once or repeatidly, the delay between each publishing. These three parameters can be overridden by arguments on the command line
-3. Run the script (it is recommended to set the update rate to a low value e.g. 5s for intial test) and check if it is working properly:
+  * The default parameters of the scripts: whether discovery messages shall be published or not, whether the MQTT messages with system information shall be sent once or repeatidly, the delay between each publishing. These three parameters can be overwritten by arguments on the command line
+3. Run the script `sh sysinfo_MQTTtoHA.sh`(it is recommended to set the update rate to a low value e.g. 5s for intial test) and check if it is working properly:
   * By checking the discovery messages are published by the command `mosquitto_sub -h MQTTBrokerIP -t homeassistant/#/config` 
   * By checking the MQTT messages with system information are periodically published by the command `mosquitto_sub -h MQTTBrokerIP -t computers/+`
   * By checking a new device is available in Home Assistant (assuming the variable `use_device` is set to 1)
@@ -65,7 +65,7 @@ It is assumed that an MQTT broker (e.g. [mosquitto](https://mosquitto.org/)) is 
 The status of the service (active/stopped) is reflected in Home Assistant: the entities are declared "unavailable" when the service is stopped (or the script no longer executed in loop mode)
 
 ### Command line
-To ease debug/investigations, the script can be launched with some arguments:
+To ease debug/investigations, the script `sysinfo_MQTTtoHA.sh` can be launched with some arguments:
 
 * Argument `-d`:
 
