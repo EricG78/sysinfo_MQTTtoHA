@@ -66,7 +66,7 @@ The status of the service (active/stopped) is reflected in Home Assistant: the e
  
  | active       | stopped    |
  |--------------|------------|
- ![Sensors available (service: active)](/images/sysinfo_MQTTtoHA_serviceActive.png) | ![Sensors unavailable (service: stop)](/images/sysinfo_MQTTtoHA_serviceStopped.png)
+ ![Sensors available (service: active)](/images/sysinfoMQTTtoHA_serviceActive.png) | ![Sensors unavailable (service: stop)](/images/sysinfo_MQTTtoHA_serviceStopped.png)
  
 
 ### Command line
