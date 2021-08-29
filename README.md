@@ -60,7 +60,7 @@ It is assumed that an MQTT broker (e.g. [mosquitto](https://mosquitto.org/)) is 
   * By checking the MQTT messages with system information are periodically published by the command `mosquitto_sub -h MQTTBrokerIP -t computers/+`
   * By checking a new device is available in Home Assistant (assuming the variable `use_device` is set to 1)
   * By checking new entities are available in Home Assistant
-4. If it works as expected, the script can be automatically launched as a service for machines supporting systemd. Run the script `install_service.sh` with the root priviledges: `sudo sh install_service.sh`. By default, a message is sent every minutes. To change the value, edit the script `install_service.sh` with a text editor and replace the value 60 on line 53: `execCmdLine="$shPath $scriptPath -d yes -r loop -t 60"`.
+4. If it works as expected, the script can be automatically launched as a service for machines supporting systemd. Run the script `install_service.sh` with the root priviledges: `sudo sh install_service.sh`. By default, a message is sent every minutes. To change the value, run the script with  the argument -t nn where nn is a delay in seconds between the publishing of system information messages. (e.g. for one message every 5 minutes: `sudo sh install_service.sh -t 300`.
 
 The status of the service (active/stopped) is reflected in Home Assistant: the entities are declared "unavailable" when the service is stopped (or the script no longer executed in loop mode)
 
