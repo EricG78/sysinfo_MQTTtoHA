@@ -27,7 +27,7 @@ if [ "${EUID:- `id -u`}" -ne 0 ]
   exit
 fi
 
-# Check if the default value is overriden by argument -t
+# Check if the default value is overwritten by argument -t
 update_rate=60
 while getopts ":t:h" o; do
 	case "${o}" in
