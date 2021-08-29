@@ -20,6 +20,34 @@ if [ "${EUID:- `id -u`}" -ne 0 ]
   exit
 fi
 
+update_rate=60
+while getopts ":t:h" o; do
+	case "${o}" in
+	t)
+		update_rate=${OPTARG}
+		if [ -n "$update_rate" ] && [ "$update_rate" -eq "$update_rate" ] 2>/dev/null; then
+			echo "Update rate: $update_rate seconds"
+		else
+			echo "Argument after -t shall be a number (update rate in seconds)"
+			usage
+		fi
+		;;
+	h)
+		usage
+		;;
+	:)
+		echo "ERROR: Option -$OPTARG requires an argument"
+		usage
+		;;
+	\?)
+		echo "ERROR: Invalid option -$OPTARG"
+		usage
+		;;
+	esac
+done
+shift $((OPTIND-1))
+
+
 # Check dependancies
 dl_bc=`[ -z "$(which bc)" ] && echo "bc"`
 dl_mosquitto=`[ -z "$(which mosquitto_pub)" ] && echo "mosquitto-clients"`
@@ -31,11 +59,11 @@ fi
 
 scriptName="sysinfo_MQTTtoHA"
 
-# Find bash location
+# Find sh location
 shPath="/bin/sh"
 if [ ! -f $shPath ]; then
         shPath=$(which sh)
-        echo "sh found by which command: $bashPath"
+        echo "sh found by which command: $shPath"
 fi
 if [ -z shPath ]; then
         echo "Error: Unable to find sh"
