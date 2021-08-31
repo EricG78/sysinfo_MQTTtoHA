@@ -33,6 +33,8 @@ discovery_prefix="homeassistant"
 # For instance: all sensors linked with a machine will be linked to the device "hostname_sysinfo_MQTTtoHA". It eases the integration in Home Assistant : by selected the device,
 # in Home Assistant configuration, an entity card with all the sensors linked to the device si ready to be included in Lovelace interface.
 use_device=1
+# Name prefix of the sensors
+name_prefix="PC Bureau"
 
 # Default value for delay between messages (in seconds) - Can be overwritten by argument "-t nn"
 update_rate=60
@@ -137,9 +139,13 @@ pubDiscoveryMessages() {
 	# Device
 	local device="\\\"device\\\":{\\\"name\\\":\\\"$host\\\",\\\"identifiers\\\":\\\"${host}_${script}\\\",\\\"manufacturer\\\":\\\"$script\\\",\\\"sw_version\\\":\\\"$version\\\"}"
 
+	if [ -z "$name_prefix" ]; then
+		name_prefix="$host "
+	fi
+
 	# Hostname
 	unique_id="${host}_hostname"
-	name="Hostname"
+	name="$name_prefix Hostname"
 	icon="mdi:lan-connect"
 	template="{{value_json.hostname}}"
 	topic="$discovery_prefix/sensor/$unique_id/config"
@@ -151,7 +157,7 @@ pubDiscoveryMessages() {
 
 	# Operating system
 	unique_id="${host}_os"
-	name="OS"
+	name="$name_prefix OS"
 	icon="mdi:linux"
 	template="{{value_json.os}}"
 	topic="$discovery_prefix/sensor/$unique_id/config"
@@ -164,7 +170,7 @@ pubDiscoveryMessages() {
 	# Model
 	if [ ! -z "$model" ]; then
 		unique_id="${host}_model"
-		name="Model"
+		name="$name_prefix Model"
 		icon="mdi:raspberry-pi"
 		template="{{value_json.model}}"
 		topic="$discovery_prefix/sensor/$unique_id/config"
@@ -177,7 +183,7 @@ pubDiscoveryMessages() {
 
 	# Processor
 	unique_id="${host}_proc"
-	name="Processor"
+	name="$name_prefix Processor"
 	icon="mdi:cpu-64-bit"
 	template="{{value_json.proc}}"
 	topic="$discovery_prefix/sensor/$unique_id/config"
@@ -189,7 +195,7 @@ pubDiscoveryMessages() {
 
 	# Number of processors
 	unique_id="${host}_nproc"
-	name="Number of processor(s)"
+	name="$name_prefix Number of processor(s)"
 	icon="mdi:cpu-64-bit"
 	template="{{value_json.nproc}}"
 	topic="$discovery_prefix/sensor/$unique_id/config"
@@ -201,7 +207,7 @@ pubDiscoveryMessages() {
 
 	# CPU load
 	unique_id="${host}_cpuload"
-	name="CPU load"
+	name="$name_prefix CPU load"
 	icon="mdi:gauge"
 	template="{{value_json.cpu_load}}"
 	topic="$discovery_prefix/sensor/$unique_id/config"
@@ -213,7 +219,7 @@ pubDiscoveryMessages() {
 
 	# Disk size
 	unique_id="${host}_disksize"
-	name="Disk size"
+	name="$name_prefix Disk size"
 	icon="mdi:sd"
 	template="{{value_json.disk_size}}"
 	topic="$discovery_prefix/sensor/$unique_id/config"
@@ -225,7 +231,7 @@ pubDiscoveryMessages() {
 
 	# Disk usage
 	unique_id="${host}_diskusage"
-	name="Disk usage"
+	name="$name_prefix Disk usage"
 	icon="mdi:gauge"
 	template="{{value_json.disk_usage}}"
 	topic="$discovery_prefix/sensor/$unique_id/config"
@@ -237,7 +243,7 @@ pubDiscoveryMessages() {
 
 	# Memory usage
 	unique_id="${host}_memory"
-	name="Memory usage"
+	name="$name_prefix Memory usage"
 	icon="mdi:gauge"
 	template="{{value_json.memory}}"
 	topic="$discovery_prefix/sensor/$unique_id/config"
@@ -249,7 +255,7 @@ pubDiscoveryMessages() {
 
 	# Swap usage
 	unique_id="${host}_swap"
-	name="Swap usage"
+	name="$name_prefix Swap usage"
 	icon="mdi:gauge"
 	template="{{value_json.swap}}"
 	topic="$discovery_prefix/sensor/$unique_id/config"
@@ -261,7 +267,7 @@ pubDiscoveryMessages() {
 
 	# Uptime
 	unique_id="${host}_uptime"
-	name="Uptime"
+	name="$name_prefix Uptime"
 	icon="mdi:clock"
 	template="{{timedelta(seconds=(value_json.uptime|int))}}"
 	topic="$discovery_prefix/sensor/$unique_id/config"
@@ -273,7 +279,7 @@ pubDiscoveryMessages() {
 
 	# Temperature
 	unique_id="${host}_temperature"
-	name="Temperature"
+	name="$name_prefix Temperature"
 	icon="mdi:thermometer"
 	template="{{value_json.temperature}}"
 	topic="$discovery_prefix/sensor/$unique_id/config"
@@ -285,7 +291,7 @@ pubDiscoveryMessages() {
 
 	# IP address
 	unique_id="${host}_ipaddr"
-	name="IP address"
+	name="$name_prefix IP address"
 	icon="mdi:ip-network-outline"
 	template="{{value_json.ip}}"
 	if [ -z "$connection" ]; then
@@ -305,7 +311,7 @@ pubDiscoveryMessages() {
 
 
 
-# Echo usage if something isn't right.
+# Usage
 usage() {
     echo "Usage: $0 [-d <yes|no>] [-r <loop|once|no>] [-t rate_s] [-h]\n\n\
 -d <yes|no>: MQTT Discovery messages are published (-d yes) or not pulbished (-d no)\n\
@@ -314,6 +320,9 @@ usage() {
    - is published periodically (-r loop) in an endless loop \n\
    - is not published (-r no) \n\
 -t rate_s: rate_s shall be a numeric value. It defines the periodicity of the publishing of MQTT messages with system infomation
+-n name_prefix: the string name_prefix will be used for as prefix for the name the sensors. For instance -n 'Lab Computer' will 
+                result of sensors in Home Assistant named 'Lab Computer Hostname', 'Lab Computer IP'...
+                If name_prefix is not set, the hostname of the machine will be used.
 -h display this help"  1>&2; exit 1;
 }
 
@@ -326,7 +335,7 @@ changeStatus() {
 }
 
 #logger -t $script Start
-while getopts ":d:r:t:h" o; do
+while getopts ":d:r:t:n:h" o; do
 	case "${o}" in
         d)
 		pub_discovery=$(echo ${OPTARG}| tr '[:upper:]' '[:lower:]')
@@ -335,7 +344,6 @@ while getopts ":d:r:t:h" o; do
 	r)
 		run_mode=$(echo ${OPTARG}| tr '[:upper:]' '[:lower:]')
 		[ $run_mode != "loop" ] && [ $run_mode != "once" ] && [ $run_mode != "no" ] && usage
-
 		;;
 	t)
 		update_rate=${OPTARG}
@@ -345,6 +353,9 @@ while getopts ":d:r:t:h" o; do
 			echo "Argument after -t shall be a number (update rate in seconds)"
 			usage
 		fi
+		;;
+	n)
+		name_prefix=${OPTARG}
 		;;
 	h)
 		usage
