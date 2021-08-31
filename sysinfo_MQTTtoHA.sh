@@ -33,8 +33,8 @@ discovery_prefix="homeassistant"
 # For instance: all sensors linked with a machine will be linked to the device "hostname_sysinfo_MQTTtoHA". It eases the integration in Home Assistant : by selected the device,
 # in Home Assistant configuration, an entity card with all the sensors linked to the device si ready to be included in Lovelace interface.
 use_device=1
-# Name prefix of the sensors
-name_prefix="PC Bureau"
+# Name prefix of the sensors - Can be changed by argument -n "Other name"
+name_prefix="Lab Computer"
 
 # Default value for delay between messages (in seconds) - Can be overwritten by argument "-t nn"
 update_rate=60
