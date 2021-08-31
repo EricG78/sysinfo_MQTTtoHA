@@ -18,6 +18,7 @@
 usage() {
     echo "Usage: sudo sh $0  [-t rate_s] [-h]\n\n\
 -t rate_s: rate_s shall be a numeric value. It defines the periodicity of the publishing of MQTT messages with system infomation (default value is 60s)
+-n name_prefix: Prefix for the name of the sensors in Home Assistant (e.g. 'name_prefix Disk size'...) (default value is the hostname of the computer)
 -h display this help"  1>&2; exit 1;
 }
 
@@ -29,7 +30,7 @@ fi
 
 # Check if the default value is overwritten by argument -t
 update_rate=60
-while getopts ":t:h" o; do
+while getopts ":t:n:h" o; do
 	case "${o}" in
 	t)
 		update_rate=${OPTARG}
@@ -39,6 +40,9 @@ while getopts ":t:h" o; do
 			echo "Argument after -t shall be a number (update rate in seconds)"
 			usage
 		fi
+		;;
+	n)
+		name_prefix=${OPTARG}
 		;;
 	h)
 		usage
@@ -86,7 +90,10 @@ if [ ! -f $scriptPath ]; then
 fi
 
 # Full command line
-execCmdLine="$shPath $scriptPath -d yes -r loop -t $update_rate"
+if [ ! -z "$name_prefix" ]; then
+	arg_name_prefix="-n '$name_prefix'"
+fi
+execCmdLine="$shPath $scriptPath -d yes -r loop -t $update_rate $arg_name_prefix"
 
 # Find user behind sudo
 user=$(who am i | awk '{print $1}')
@@ -108,6 +115,12 @@ Restart=always\n\
 RestartSec=3\n\n\
 [Install]\n\
 WantedBy=default.target" >> $tempFileName
+
+# Stop the service if active
+serviceactive=$(systemctl is-active $scriptName.service)
+if [ "$serviceactive" = "active" ]; then
+	systemctl stop $scriptName.service
+fi
 
 # Copy to the systemd directory
 cp $tempFileName /etc/systemd/system/$scriptName.service
