@@ -81,7 +81,7 @@ collect_info() {
 	#Memory usage
 	memory=$(free -b | awk 'NR == 2  {print $0}' | awk  -F: '{print $2}' | awk '{printf "%2.1f", 100*$2/$1}' | sed s/,/./g)
 	#Swap usage
-	swap=$(free -b | awk 'NR == 3  {print $0}' | awk  -F: '{print $2}' | awk '{printf "%2.1f", 100*$2/$1}' | sed s/,/./g)
+	swap=$(free -b | awk 'NR == 3  {print $0}' | awk  -F: '{print $2}' | awk '{if ($1==0) print "0.0"; else printf "%2.1f", 100*$2/$1;}' | sed s/,/./g)
 	#Disk size
 	disk_size=$(df -Ph | grep /$ | awk '{ print $2;}' | sed s/%//g)
 	#Disk usage
